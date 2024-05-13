@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './app/prisma/prisma.service';
-import { ChatModule } from './app/room/room.module';
-import { ChatController } from './app/room/room.controller';
-import { ChatService } from './app/room/room.service';
 import { UserModule } from './app/user/user.module';
-import { MessageModule } from './app/message/message.module';
 import { UserController } from './app/user/user.controller';
-import { MessageController } from './app/message/message.controller';
 import { UserService } from './app/user/user.service';
+import { RoomController } from './app/room/room.controller';
+import { RoomService } from './app/room/room.service';
+import { RoomModule } from './app/room/room.module';
+import { MessageController } from './app/message/message.controller';
 import { MessageService } from './app/message/message.service';
+import { MessageModule } from './app/message/message.module';
 
 @Module({
-  imports: [UserModule, ChatModule, MessageModule],
-  controllers: [UserController, ChatController, MessageController],
-  providers: [PrismaService, UserService, ChatService, MessageService],
+  imports: [UserModule, RoomModule, MessageModule],
+  controllers: [UserController, RoomController, MessageController],
+  providers: [PrismaService, UserService, RoomService, MessageService],
 })
 export class AppModule {}
