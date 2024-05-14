@@ -15,7 +15,6 @@ import {
 } from 'rxjs';
 import { REQUEST_TIMEOUT } from 'src/configs/request-timeout';
 import { Timeout } from 'src/decorators/timeout.decorator';
-import { isEmpty } from 'src/utils/validation-utils';
 
 @Injectable()
 export class TimeoutInterceptor implements NestInterceptor {
