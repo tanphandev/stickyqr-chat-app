@@ -13,6 +13,7 @@ import {
   timeout,
   TimeoutError,
 } from 'rxjs';
+import { REQUEST_TIMEOUT } from 'src/configs/request-timeout';
 import { Timeout } from 'src/decorators/timeout.decorator';
 import { isEmpty } from 'src/utils/validation-utils';
 
@@ -23,9 +24,8 @@ export class TimeoutInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
-    const timeoutAmount = this.reflector.get(Timeout, context.getHandler());
-    console.log('[interceptor] timeout: ', timeoutAmount);
-    if (isEmpty(timeoutAmount)) return next.handle();
+    const timeoutAmount =
+      this.reflector.get(Timeout, context.getHandler()) || REQUEST_TIMEOUT;
     return next.handle().pipe(
       timeout(timeoutAmount),
       catchError((err) => {

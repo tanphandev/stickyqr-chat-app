@@ -9,8 +9,8 @@ import {
 import { UserService } from './user.service';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CommonParams } from './dto/common-params.dto';
-import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
+import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {

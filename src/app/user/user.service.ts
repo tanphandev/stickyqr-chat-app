@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 
@@ -11,18 +11,23 @@ export class UserService {
   }
 
   async getAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        messages: true,
+        chatRooms: true,
+      },
+    });
   }
 
   async getOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    try {
-      return this.prisma.user.findUnique({
-        where: userWhereUniqueInput,
-      });
-    } catch (e) {
-      throw new InternalServerErrorException();
-    }
+    return this.prisma.user.findUnique({
+      where: userWhereUniqueInput,
+      include: {
+        chatRooms: true,
+        messages: true,
+      },
+    });
   }
 }

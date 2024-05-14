@@ -19,7 +19,6 @@ model User {
   chatRooms        ChatRoom[]    @relation(fields: [chatRoomIds], references: [id])
   chatRoomIds      String[]      @db.ObjectId
   messages         ChatMessage[]
-  messageIds       String[]      @db.ObjectId
   createdChatRooms ChatRoom[]    @relation("createdBy")
 }
 

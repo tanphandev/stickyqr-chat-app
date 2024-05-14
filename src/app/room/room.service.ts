@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ChatRoom, Prisma } from '@prisma/client';
 
@@ -6,37 +6,44 @@ import { ChatRoom, Prisma } from '@prisma/client';
 export class RoomService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.ChatRoomCreateInput) {
+  async create(data: Prisma.ChatRoomCreateInput): Promise<ChatRoom> {
     return this.prisma.chatRoom.create({ data });
   }
 
   async getAll(): Promise<ChatRoom[]> {
-    return this.prisma.chatRoom.findMany();
+    return this.prisma.chatRoom.findMany({
+      include: {
+        users: true,
+        messages: true,
+      },
+    });
   }
 
   async getOne(
     roomWhereUniqueInput: Prisma.ChatRoomWhereUniqueInput,
   ): Promise<ChatRoom | null> {
-    try {
-      return this.prisma.chatRoom.findUnique({
-        where: roomWhereUniqueInput,
-      });
-    } catch (e) {
-      throw new NotFoundException(`Chat Room not found`);
-    }
+    return this.prisma.chatRoom.findUnique({
+      where: roomWhereUniqueInput,
+      include: {
+        users: true,
+        messages: true,
+      },
+    });
   }
 
   async updateOne(
     roomWhereUniqueInput: Prisma.ChatRoomWhereUniqueInput,
     data: Prisma.ChatRoomUpdateInput,
   ): Promise<ChatRoom> {
-    try {
-      return this.prisma.chatRoom.update({
-        where: roomWhereUniqueInput,
-        data,
-      });
-    } catch (e) {
-      throw new NotFoundException(`Chat Room not found`);
-    }
+    console.log('roomWhereUniqueInput', roomWhereUniqueInput);
+    console.log('data', data);
+    return this.prisma.chatRoom.update({
+      where: roomWhereUniqueInput,
+      data,
+      include: {
+        users: true,
+        messages: true,
+      },
+    });
   }
 }

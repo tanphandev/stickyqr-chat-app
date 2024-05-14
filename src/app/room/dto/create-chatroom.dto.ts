@@ -1,17 +1,8 @@
-import {
-  ArrayMinSize,
-  IsBoolean,
-  IsMongoId,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { ArrayMinSize, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class CreateChatRoomDto {
   @IsString()
   name: string;
-
-  @IsBoolean()
-  isGroup: boolean;
 
   @IsMongoId()
   createdById: string;
@@ -25,8 +16,8 @@ export class CreateChatRoomDto {
 
   @IsOptional()
   @IsMongoId({ each: true })
-  @ArrayMinSize(1, {
-    message: 'The messageIds array must contain at least 1 messageId.',
-  })
+  // @ArrayMinSize(1, {
+  //   message: 'The messageIds array must contain at least 1 messageId.',
+  // })
   messageIds?: string[];
 }
