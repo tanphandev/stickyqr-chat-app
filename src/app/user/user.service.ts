@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 
@@ -18,11 +18,11 @@ export class UserService {
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
     try {
-      return await this.prisma.user.findUnique({
+      return this.prisma.user.findUnique({
         where: userWhereUniqueInput,
       });
     } catch (e) {
-      throw new NotFoundException(`User not found`);
+      throw new InternalServerErrorException();
     }
   }
 }
