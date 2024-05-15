@@ -31,7 +31,7 @@ export class MessageService {
     await this.ablyService.sendMessage(
       ablyMessage.channel,
       ablyMessage.event,
-      data.body,
+      ablyMessage.message,
     );
 
     // Save message to database

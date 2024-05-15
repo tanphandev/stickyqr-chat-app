@@ -31,6 +31,27 @@ export class RoomService {
     });
   }
 
+  async getMany(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.ChatRoomWhereUniqueInput;
+    where?: Prisma.ChatRoomWhereInput;
+    orderBy?: Prisma.ChatRoomOrderByWithRelationInput;
+  }): Promise<ChatRoom[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.chatRoom.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        users: true,
+        messages: true,
+      },
+    });
+  }
+
   async updateOne(
     roomWhereUniqueInput: Prisma.ChatRoomWhereUniqueInput,
     data: Prisma.ChatRoomUpdateInput,

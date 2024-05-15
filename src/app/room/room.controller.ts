@@ -34,6 +34,21 @@ export class RoomController {
     return room;
   }
 
+  @Get('user/:id')
+  async getChatRoomsByUserId(
+    @Param(new ValidationPipe()) params: CommonParams,
+  ): Promise<ChatRoom[]> {
+    return this.roomService.getMany({
+      where: {
+        users: {
+          some: {
+            id: params.id,
+          },
+        },
+      },
+    });
+  }
+
   @Post()
   async createChatRoom(
     @Body(new ValidationPipe()) createChatRoomDto: CreateChatRoomDto,

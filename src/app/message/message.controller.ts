@@ -57,7 +57,12 @@ export class MessageController {
     const ablyMessage: AblyMesssage = {
       channel: createChatMessageDto.chatRoomId,
       event: ABLY_EVENT.NEW_MESSAGE,
-      message: createChatMessageDto.body,
+      message: {
+        type: createChatMessageDto.type,
+        body: createChatMessageDto.body,
+        senderId: createChatMessageDto.senderId,
+        chatRoomId: createChatMessageDto.chatRoomId,
+      },
     };
     return this.messageService.create(dataCreate, ablyMessage);
   }
