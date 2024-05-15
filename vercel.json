@@ -5,7 +5,7 @@
       "src": "src/main.ts",
       "use": "@vercel/node",
       "config": {
-        "buildCommand": "pnpm run prisma:generate && pnpm run build"
+        "buildCommand": "pnpm run vercel-build"
       }
     }
   ],
