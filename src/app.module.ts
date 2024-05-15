@@ -11,15 +11,24 @@ import { MessageService } from './app/message/message.service';
 import { MessageModule } from './app/message/message.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
+import { AblyService } from './app/ably/ably.service';
+import { AblyModule } from './app/ably/ably.module';
+import { AblyController } from './app/ably/ably.controller';
 
 @Module({
-  imports: [UserModule, RoomModule, MessageModule],
-  controllers: [UserController, RoomController, MessageController],
+  imports: [UserModule, RoomModule, MessageModule, AblyModule],
+  controllers: [
+    UserController,
+    RoomController,
+    MessageController,
+    AblyController,
+  ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: TimeoutInterceptor,
     },
+    AblyService,
     PrismaService,
     UserService,
     RoomService,

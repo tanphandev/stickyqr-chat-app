@@ -12,16 +12,21 @@ import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CommonParams } from '../user/dto/common-params.dto';
 import { CreateChatMessageDto } from './dto/create-chat-message.dto';
 import { UpdateChatMessageDto } from './dto/update-chat-message.dto';
+import { Prisma } from '@prisma/client';
+import { AblyMesssage } from '../ably/interfaces/ably-message.interface';
+import { ABLY_EVENT } from '../ably/constant';
 
 @Controller('message')
 export class MessageController {
   constructor(private messageService: MessageService) {}
 
+  // get all messages
   @Get('all')
   async getAll() {
     return this.messageService.getAll();
   }
 
+  // get message by id
   @Get(':id')
   async getChatMessageById(@Param(new ValidationPipe()) params: CommonParams) {
     const message = await this.messageService.getOne({ id: params.id });
@@ -31,11 +36,12 @@ export class MessageController {
     return message;
   }
 
+  // create new message
   @Post()
   async createChatMessage(
     @Body(new ValidationPipe()) createChatMessageDto: CreateChatMessageDto,
   ) {
-    return this.messageService.create({
+    const dataCreate: Prisma.ChatMessageCreateInput = {
       type: createChatMessageDto.type,
       body: createChatMessageDto.body,
       sender: {
@@ -46,9 +52,17 @@ export class MessageController {
           id: createChatMessageDto.chatRoomId,
         },
       },
-    });
+    };
+
+    const ablyMessage: AblyMesssage = {
+      channel: createChatMessageDto.chatRoomId,
+      event: ABLY_EVENT.NEW_MESSAGE,
+      message: createChatMessageDto.body,
+    };
+    return this.messageService.create(dataCreate, ablyMessage);
   }
 
+  // update message by id
   @Put(':id')
   async updateChatMessage(
     @Param(new ValidationPipe()) params: CommonParams,
