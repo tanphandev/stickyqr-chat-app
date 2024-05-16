@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CommonParams } from './dto/common-params.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
 
 @Controller('user')
@@ -32,14 +24,5 @@ export class UserController {
       throw new NotFoundException('User not found');
     }
     return user;
-  }
-
-  @Post()
-  async createUser(
-    @Body(new ValidationPipe()) createUserDto: CreateUserDto,
-  ): Promise<User> {
-    return this.userService.create({
-      name: createUserDto.name,
-    });
   }
 }
