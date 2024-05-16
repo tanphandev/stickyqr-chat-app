@@ -14,9 +14,10 @@ import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
 import { AblyService } from './app/ably/ably.service';
 import { AblyModule } from './app/ably/ably.module';
 import { AblyController } from './app/ably/ably.controller';
+import { AuthModule } from './app/auth/auth.module';
 
 @Module({
-  imports: [UserModule, RoomModule, MessageModule, AblyModule],
+  imports: [UserModule, RoomModule, MessageModule, AblyModule, AuthModule],
   controllers: [
     UserController,
     RoomController,
