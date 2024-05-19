@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { Request } from 'express';
 
 @Injectable()
@@ -23,10 +23,15 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
       request['user'] = payload;
-    } catch {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    } catch (e) {
+      if (e instanceof TokenExpiredError) {
+        // return 403 Forbidden status code if token is expired
+        throw new HttpException('Token expired', HttpStatus.FORBIDDEN);
+      } else {
+        // return 401 Unauthorized status code if token is invalid
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
     }
-
     return true;
   }
 

@@ -14,9 +14,7 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUserById(
-    @Param(new ValidationPipe()) params: CommonParams,
-  ): Promise<User | null> {
+  async getUserById(@Param(new ValidationPipe()) params: CommonParams) {
     const user = await this.userService.getOne({
       id: params.id,
     });

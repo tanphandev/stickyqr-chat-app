@@ -9,13 +9,15 @@ import { RoomModule } from './app/room/room.module';
 import { MessageController } from './app/message/message.controller';
 import { MessageService } from './app/message/message.service';
 import { MessageModule } from './app/message/message.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
 import { AblyService } from './app/ably/ably.service';
 import { AblyModule } from './app/ably/ably.module';
 import { AblyController } from './app/ably/ably.controller';
 import { AuthModule } from './app/auth/auth.module';
 import { AuthService } from './app/auth/auth.service';
+import { AuthController } from './app/auth/auth.controller';
+import { AccessTokenGuard } from './guard/access-token.guard';
 
 @Module({
   imports: [UserModule, RoomModule, MessageModule, AblyModule, AuthModule],
@@ -23,6 +25,7 @@ import { AuthService } from './app/auth/auth.service';
     UserController,
     RoomController,
     MessageController,
+    AuthController,
     AblyController,
   ],
   providers: [
@@ -30,12 +33,16 @@ import { AuthService } from './app/auth/auth.service';
       provide: APP_INTERCEPTOR,
       useClass: TimeoutInterceptor,
     },
-    AblyService,
-    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
     UserService,
-    AuthService,
     RoomService,
     MessageService,
+    AuthService,
+    AblyService,
+    PrismaService,
   ],
 })
 export class AppModule {}

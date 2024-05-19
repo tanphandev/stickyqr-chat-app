@@ -18,6 +18,7 @@ model User {
   name             String
   phoneNumber      String        @unique
   password         String
+  hashedRt         String?
   chatRooms        ChatRoom[]    @relation(fields: [chatRoomIds], references: [id])
   chatRoomIds      String[]      @db.ObjectId
   messages         ChatMessage[]
