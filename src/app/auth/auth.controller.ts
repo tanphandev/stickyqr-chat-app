@@ -9,11 +9,10 @@ import {
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { AuthGuard } from 'src/guard/auth.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
-import { AccessTokenGuard } from 'src/guard/access-token.guard';
 import { Public } from 'src/decorators/public.decorator';
 import { RefreshTokenGuard } from 'src/guard/refresh-token.guard';
+import { Timeout } from 'src/decorators/timeout.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -33,6 +32,7 @@ export class AuthController {
 
   @Get('refresh')
   @Public()
+  @Timeout(10000)
   @UseGuards(RefreshTokenGuard)
   async refresh(@Request() req) {
     const { refreshToken, userId } = req?.user;

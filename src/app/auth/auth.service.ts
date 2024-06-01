@@ -72,11 +72,8 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    console.log('hashedRt', user.hashedRt);
-    console.log('refreshToken', refreshToken);
     //campare rt
     const refreshTokenMatch = await checkHash(user.hashedRt, refreshToken);
-    console.log('refreshTokenMatch', refreshTokenMatch);
     if (!refreshTokenMatch) {
       throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
